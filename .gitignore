@@ -1,0 +1,7 @@
+venv/
+40.8.0
+node_modules/
+chromedriver.exe
+csv-files/
+package-lock.json
+package.json

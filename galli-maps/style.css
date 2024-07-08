@@ -1,0 +1,87 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+header {
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+}
+
+main {
+    display: flex;
+    flex-grow: 1;
+}
+
+#map-container {
+    flex: 2;
+    height: calc(100vh - 130px);
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+}
+
+#sidebar {
+    flex: 1;
+    padding: 1rem;
+    overflow-y: auto;
+    background-color: #f0f0f0;
+}
+
+#search-container {
+    margin-bottom: 1rem;
+}
+
+#search-input {
+    width: 70%;
+    padding: 0.5rem;
+}
+
+#search-button {
+    width: 25%;
+    padding: 0.5rem;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#recommendation-list {
+    margin-bottom: 1rem;
+}
+
+#recommendation-details {
+    background-color: white;
+    padding: 1rem;
+    border-radius: 5px;
+}
+
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+}
+
+#route-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+#route-button:hover {
+    background-color: #45a049;
+}
