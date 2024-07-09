@@ -21,7 +21,8 @@ function initMap() {
             maxZoom: 100, 
             minZoom: 2,
             clickable: true
-        }
+        },
+        pano: { container: 'pano', },
     };
 
     map = new GalliMapPlugin(galliMapsObject);

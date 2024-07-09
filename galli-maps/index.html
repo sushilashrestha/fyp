@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
     <title>Travel Recommendations</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://gallimap.com/static/dist/js/gallimaps.vector.min.latest.js"></script>
 </head>
 <body>
     <header>
@@ -13,19 +14,20 @@
     </header>
     <main>
         <div id="map-container">
-            <div style=height:80vh, id="map"></div>
+            <div id="map" style="height: 80vh;"></div>
+            <div id="pano"></div>
         </div>
-        <div id="sidebar">
-            <button id ="show recommendations-button">Show Recommendtions</button>
-            <button id="route-button">Find Shortest Route</button>
+        <aside id="sidebar">
+            <button  type='button' id="show-recommendations-button">Show Recommendations</button>
+            <button type='button' id="route-button">Find Shortest Route</button>
             <div id="recommendation-list"></div>
             <div id="recommendation-details"></div>
-        </div>
+        </aside>
     </main>
     <footer>
         <p>&copy; 2024 Travel Recommendations. All rights reserved.</p>
     </footer>
-    
+    <script src="https://gallimap.com/static/dist/js/gallimaps.vector.min.latest.js"></script>
     <script src="map.js"></script>
 </body>
 </html>
