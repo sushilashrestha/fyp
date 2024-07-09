@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Travel Recommendations</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="style.css">
     <script src="https://gallimap.com/static/dist/js/gallimaps.vector.min.latest.js"></script>
 </head>
 <body>
@@ -13,9 +13,10 @@
     </header>
     <main>
         <div id="map-container">
-            <div id="map"></div>
+            <div style=height:80vh, id="map"></div>
         </div>
         <div id="sidebar">
+            <button id ="show recommendations-button">Show Recommendtions</button>
             <button id="route-button">Find Shortest Route</button>
             <div id="recommendation-list"></div>
             <div id="recommendation-details"></div>
@@ -25,9 +26,6 @@
         <p>&copy; 2024 Travel Recommendations. All rights reserved.</p>
     </footer>
     
-    <script src="js/recommendations.js"></script>
-    <script src="js/map.js"></script>
-    <script src="js/route.js"></script>
-    <script src="js/main.js"></script>
+    <script src="map.js"></script>
 </body>
 </html>
