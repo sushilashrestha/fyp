@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bhaktapur Attraction Recommendation</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>Bhaktapur Attraction Recommendation</h1>
+        <div class="user-input">
+            <label for="interests">Interests:</label>
+            <select id="interests" multiple>
+                <option value="architecture">Architecture</option>
+                <option value="culture">Culture</option>
+                <option value="history">History</option>
+                <option value="spiritual">Spiritual</option>
+                <option value="art">Art</option>
+                <option value="shopping">Shopping</option>
+                <option value="local life">Local Life</option>
+                <option value="scenic">Scenic</option>
+                <option value="nature">Nature</option>
+            </select>
+            
+            <label for="budget">Budget:</label>
+            <select id="budget">
+                <option value="5">Low ($0-$5)</option>
+                <option value="15">Medium ($6-$15)</option>
+                <option value="25">High ($16+)</option>
+            </select>
+            
+            <label for="time">Preferred Time:</label>
+            <select id="time">
+                <option value="9">Morning (6AM-12PM)</option>
+                <option value="14">Afternoon (12PM-6PM)</option>
+                <option value="19">Evening (6PM-10PM)</option>
+            </select>
+            
+            <button onclick="getRecommendations()">Get Recommendations</button>
+        </div>
+        <div id="recommendations"></div>
+        <div id="attraction-details"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

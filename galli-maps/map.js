@@ -1,6 +1,7 @@
 const API_KEY = 'a453078f-e401-479b-ad07-24236aae961c'; // Replace with your actual API key
 let map;
 let markers = [];
+let isShowing = 0;
 
 const recommendations = [
     { id: 1, name: "Bhaktapur Durbar Square", latitude: 27.6722, longitude: 85.4285, description: "A historic royal palace complex with courtyards, temples, and statues.", rating: 4.7 },
@@ -29,27 +30,32 @@ function initMap() {
 }
 
 function addMarkersToMap() {
-    recommendations.forEach(loc => {
-        let pinMarkerObject = {
-            color: "#8A2BE2", // Blue violet
-            draggable: false,
-            latLng: [loc.latitude, loc.longitude]
-        };
-        let marker = map.displayPinMarker(pinMarkerObject);
 
-        marker.on('click', function() {
-            showRecommendationDetails(loc.id);
+    isShowing = 1 - isShowing;
+
+     if (isShowing == 1){
+         
+         recommendations.forEach(loc => {
+             let pinMarkerObject = {
+                 color: "#8A2BE2", // Blue violet
+                 draggable: false,
+                 latLng: [loc.latitude, loc.longitude]
+             };
+             let marker = map.displayPinMarker(pinMarkerObject);
+     
+             marker.on('click', function() {
+                 showRecommendationDetails(loc.id);
+             });
+     
+             markers.push({id: loc.id, marker: marker});
+         });
+     }
+     else {
+        markers.forEach(marker => {
+            map.removePinMarker(marker.marker);
         });
-
-        markers.push({id: loc.id, marker: marker});
-    });
-}
-
-function removeMarkers() {
-    markers.forEach(marker => {
-        map.removePinMarker(marker.marker);
-    });
-    markers = [];
+        markers = [];
+     }
 }
 
 function displayRecommendationList() {
@@ -148,8 +154,7 @@ document.addEventListener('DOMContentLoaded', function() {
     displayRecommendationList();
 
     document.getElementById('show-recommendations-button').addEventListener('click', function() {
-        console.log('Show Recommendations button clicked');
-        removeMarkers(); // Clear existing markers
+        console.log('Show Recommendations button clicked'); // Clear existing markers
         addMarkersToMap();
     });
 

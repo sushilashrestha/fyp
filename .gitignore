@@ -5,3 +5,4 @@ chromedriver.exe
 csv-files/
 package-lock.json
 package.json
+__pycache__
