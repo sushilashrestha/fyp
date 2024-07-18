@@ -1,49 +1,68 @@
 import pandas as pd
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.preprocessing import MultiLabelBinarizer
 
 class RecommendationSystem:
-    def __init__(self):
-        # Sample data: name, entry_fee, opening_hour, closing_hour, attraction_type, interests
-        self.data = pd.DataFrame([
-            ('Durbar Square', 15, 8, 18, 'historical', ['architecture', 'culture', 'history']),
-            ('Nyatapola Temple', 0, 6, 18, 'religious', ['architecture', 'culture', 'spiritual']),
-            ('Bhairavnath Temple', 0, 6, 18, 'religious', ['architecture', 'culture', 'spiritual']),
-            ('Taumadhi Square', 0, 0, 24, 'landmark', ['culture', 'local life']),
-            ('Pottery Square', 0, 8, 17, 'cultural', ['art', 'shopping', 'local life']),
-            ('Peacock Window', 0, 0, 24, 'architectural', ['architecture', 'history']),
-            ('National Art Gallery', 2, 10, 17, 'museum', ['art', 'culture', 'history']),
-            ('Changu Narayan Temple', 10, 8, 18, 'religious', ['architecture', 'history', 'spiritual']),
-            ('Kailashnath Mahadev Statue', 0, 6, 18, 'landmark', ['spiritual', 'scenic']),
-            ('Suryavinayak Temple', 0, 6, 18, 'religious', ['spiritual', 'nature']),
-        ], columns=['name', 'entry_fee', 'opening_hour', 'closing_hour', 'attraction_type', 'interests'])
+    def __init__(self, csv_file_path):
+        # Read data from CSV file
+        self.data = pd.read_csv(csv_file_path)
+        
+        # Function to convert time to hours, handling 24:00:00 case
+        def time_to_hours(time_str):
+            if time_str == '24:00:00':
+                return 0  # or 24, depending on how you want to handle midnight
+            return pd.to_datetime(time_str, format='%H:%M').hour
 
-    def calculate_similarity(self, user_interests, user_budget, user_time, attraction):
-        # Interest similarity
-        interest_similarity = len(set(user_interests) & set(attraction['interests'])) / len(set(user_interests) | set(attraction['interests']))
+        # Convert opening and closing hours to 24-hour format
+        self.data['opening_hour'] = self.data['opening hour'].apply(time_to_hours)
+        self.data['closing_hour'] = self.data['closing hour'].apply(time_to_hours)
         
-        # Budget similarity (1 if within budget, 0 otherwise)
-        budget_similarity = 1 if attraction['entry_fee'] <= user_budget else 0
+        # Convert entry fee to numeric, replacing any non-numeric values with 0
+        self.data['entry_fee'] = pd.to_numeric(self.data['Entry fee'], errors='coerce').fillna(0)
         
-        # Time similarity (1 if open during user's preferred time, 0 otherwise)
-        time_similarity = 1 if attraction['opening_hour'] <= user_time <= attraction['closing_hour'] else 0
-        
+        # Create feature vectors
+        self.mlb = MultiLabelBinarizer()
+        self.type_features = self.mlb.fit_transform(self.data['Type'].str.split(','))
+        self.budget_features = self.data['entry_fee'].values.reshape(-1, 1)
+        self.time_features = np.column_stack((self.data['opening_hour'], self.data['closing_hour']))
+
+    def calculate_similarity(self, user_type, user_budget, user_time):
+        user_type_vector = self.mlb.transform([user_type])
+        user_budget_vector = np.array([[user_budget]])
+        user_time_vector = np.array([[user_time, user_time]])
+
+        type_sim = cosine_similarity(user_type_vector, self.type_features)
+        budget_sim = cosine_similarity(user_budget_vector, self.budget_features)
+        time_sim = cosine_similarity(user_time_vector, self.time_features)
+
         # Combine similarities (you can adjust weights as needed)
-        return (interest_similarity * 0.5) + (budget_similarity * 0.3) + (time_similarity * 0.2)
+        combined_sim = (type_sim * 0.5) + (budget_sim * 0.3) + (time_sim * 0.2)
+        return combined_sim.flatten()
 
-    def get_recommendations(self, user_interests, user_budget, user_time, top_n=5):
-        similarities = []
-        for _, attraction in self.data.iterrows():
-            similarity = self.calculate_similarity(user_interests, user_budget, user_time, attraction)
-            similarities.append((attraction['name'], similarity))
+    def get_recommendations(self, user_type, user_budget, user_time, top_n=5):
+        similarities = self.calculate_similarity(user_type, user_budget, user_time)
+        top_indices = similarities.argsort()[-top_n:][::-1]
         
-        similarities.sort(key=lambda x: x[1], reverse=True)
-        return similarities[:top_n]
+        recommendations = []
+        for idx in top_indices:
+            recommendations.append((self.data.iloc[idx]['Attraction name'], similarities[idx]))
+        
+        return recommendations
 
     def get_attraction_details(self, name):
-        return self.data[self.data['name'] == name].to_dict('records')[0]
+        attraction = self.data[self.data['Attraction name'] == name].iloc[0]
+        return {
+            'name': attraction['Attraction name'],
+            'type': attraction['Type'],
+            'opening_hour': attraction['opening hour'],
+            'closing_hour': attraction['closing hour'],
+            'entry_fee': attraction['Entry fee'],
+            'location': attraction['Location'],
+            'description': attraction['description']
+        }
 
 # Example usage
-# rs = RecommendationSystem()
-# recommendations = rs.get_recommendations(['history', 'art'], 20, 14)
+# rs = RecommendationSystem('copy.csv')
+# recommendations = rs.get_recommendations(['Temple', 'Historical Site'], 100, 14)
 # print(recommendations)

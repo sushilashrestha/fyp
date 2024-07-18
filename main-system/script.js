@@ -1,9 +1,9 @@
 async function getRecommendations() {
-    const interests = Array.from(document.getElementById('interests').selectedOptions).map(option => option.value);
+    const types = Array.from(document.getElementById('types').selectedOptions).map(option => option.value);
     const budget = document.getElementById('budget').value;
     const time = document.getElementById('time').value;
     
-    const response = await fetch(`/api/recommendations?interests=${encodeURIComponent(interests.join(','))}&budget=${budget}&time=${time}`);
+    const response = await fetch(`/api/recommendations?types=${encodeURIComponent(types.join(','))}&budget=${budget}&time=${time}`);
     const recommendations = await response.json();
 
     const recommendationsDiv = document.getElementById('recommendations');
@@ -31,9 +31,10 @@ async function getAttractionDetails(name) {
     const detailsDiv = document.getElementById('attraction-details');
     detailsDiv.innerHTML = `
         <h2>${attraction.name}</h2>
-        <p><strong>Entry Fee:</strong> $${attraction.entry_fee}</p>
-        <p><strong>Opening Hours:</strong> ${attraction.opening_hour}:00 - ${attraction.closing_hour}:00</p>
-        <p><strong>Type:</strong> ${attraction.attraction_type}</p>
-        <p><strong>Interests:</strong> ${attraction.interests.join(', ')}</p>
+        <p><strong>Type:</strong> ${attraction.type}</p>
+        <p><strong>Opening Hours:</strong> ${attraction.opening_hour} - ${attraction.closing_hour}</p>
+        <p><strong>Entry Fee:</strong> ₹${attraction.entry_fee}</p>
+        <p><strong>Location:</strong> ${attraction.location}</p>
+        <p><strong>Description:</strong> ${attraction.description}</p>
     `;
 }
