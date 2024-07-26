@@ -37,7 +37,7 @@ class RecommendationSystem:
         time_sim = cosine_similarity(user_time_vector, self.time_features)
 
         # Combine similarities (you can adjust weights as needed)
-        combined_sim = (type_sim * 0.5) + (budget_sim * 0.3) + (time_sim * 0.2)
+        combined_sim = (type_sim * 0.4) + (budget_sim * 0.3) + (time_sim * 0.3)
         return combined_sim.flatten()
 
     def get_recommendations(self, user_type, user_budget, user_time, top_n=5):

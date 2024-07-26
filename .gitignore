@@ -6,3 +6,4 @@ csv-files/
 package-lock.json
 package.json
 __pycache__
+.env
